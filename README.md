@@ -54,9 +54,18 @@ The following individuals and companies graciously provided development boards t
  * Adafruit Industries (SAMD21, SAMD51)
 
 
- # Building Bossa
+# Building Bossa
 
- ## Linux cross build of bossac.exe
+## Linux build for bossac only
+
+````
+sudo apt install -y build-essential
+make clean
+WX_CONFIG=/bin/false make WX=0 bossac
+
+````
+
+ ## Linux cross build of bossac.exe for Windows only
 
 ````
 sudo apt install mingw-w64

@@ -38,7 +38,7 @@ jobs:
       if: matrix.target == 'linux'
       run: |
         make clean
-        make WX=0 bossac -j$(nproc)
+        WX_CONFIG=/bin/false make WX=0 bossac
 
     - name: Build (Windows cross)
       if: matrix.target == 'windows'
