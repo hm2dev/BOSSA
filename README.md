@@ -1,5 +1,5 @@
-BOSSA 2.0.0
------------
+# BOSSA 2.0.0
+
 
 BOSSA is a flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers.
 The motivation behind BOSSA is to create a simple, easy-to-use, open source utility to replace Atmel's SAM-BA software.
@@ -14,8 +14,8 @@ The software was created by Scott Shumate with contributions from several
 
 The software is released under the terms of the BSD license as specified in the LICENSE file.
 
-Supported Device Families
--------------------------
+## Supported Device Families
+
  * Atmel
    * SAM7S
    * SAM7SE
@@ -44,7 +44,7 @@ Supported Device Families
 * Nordic
    * nrf52 (Support added by [Arduino](https://www.arduino.cc/)
      
-\* Device families which are not tested for each release and could stop working.
+## Device families which are not tested for each release and could stop working.
 
 Do you want to help make sure a device family is tested or do you want to see a new device family added?  Then contribute a development board with a device from that family to the BOSSA project to make it happen.  Contact scott at shumatech.com if you are interested in helping the project.
 
@@ -52,3 +52,24 @@ The following individuals and companies graciously provided development boards t
  * Atmel Corporation (SAM3N, SAM3S, SAM3U)
  * David Crocker (SAM4E, SAM4S)
  * Adafruit Industries (SAMD21, SAMD51)
+
+
+ # Building Bossa
+
+ ## Linux cross build of bossac.exe
+
+````
+sudo apt install mingw-w64
+
+cd BOSSA
+
+make clean
+
+WX_CONFIG=/bin/false make OS=MINGW32 WX=0 \
+    CC=x86_64-w64-mingw32-gcc \
+    CXX=x86_64-w64-mingw32-g++ \
+    LDFLAGS="-static" \
+    bossac \
+    -j8
+
+````

@@ -192,12 +192,12 @@ static Option opts[] =
       'p', "port", &config.port,
       { ArgRequired, ArgString, "PORT", { &config.portArg } },
       "use serial PORT to communicate to device;\n"
-      "default behavior is to use first serial port"
-      "if port is a valid combination of ip address and port e.g. 192.168.111.222:456"
+      "default behavior is to use first serial port\n"
+      "if port is a valid combination of ip address and port e.g. 192.168.111.222:456\n"
       "then the data is instead send out on an ip socket."
     },
     {
-      'a', "allowZeroOffset" &config.allowZeroOffset,
+      'a', "allowZeroOffset", &config.allowZeroOffset,
       { ArgNone },
       "allow erase (and write) starting from address 0x0 which potentially overrides the bootloader"
     },
@@ -427,8 +427,7 @@ main(int argc, char* argv[])
         if (config.erase)
         {
             if(config.offsetArg == 0x0 && ! config.allowZeroOffset){
-               printf("\nNot erasing from offset 0x0 as not to overwrite the bootloader\n 
-                Use option \"allowZeroOffset\" to allow overwrite.");
+               printf("\nNot erasing from offset 0x0 as not to overwrite the bootloader.\nUse option \"allowZeroOffset\" to allow overwrite.");
             }else{
                 timer_start();
                 flasher.erase(config.offsetArg);
