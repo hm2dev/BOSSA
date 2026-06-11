@@ -193,6 +193,8 @@ static Option opts[] =
       { ArgRequired, ArgString, "PORT", { &config.portArg } },
       "use serial PORT to communicate to device;\n"
       "default behavior is to use first serial port"
+      "if port is a valid combination of ip address and port e.g. 192.168.111.222:456"
+      "then the data is instead send out on an ip socket."
     },
     {
       'a', "allowZeroOffset" &config.allowZeroOffset,
