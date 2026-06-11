@@ -53,6 +53,7 @@ public:
     bool read;
     bool verify;
     bool offset;
+    bool allowZeroOffset;
     bool reset;
     bool port;
     bool boot;
@@ -192,6 +193,11 @@ static Option opts[] =
       { ArgRequired, ArgString, "PORT", { &config.portArg } },
       "use serial PORT to communicate to device;\n"
       "default behavior is to use first serial port"
+    },
+    {
+      'a', "allowZeroOffset" &config.allowZeroOffset,
+      { ArgNone },
+      "allow erase (and write) starting from address 0x0 which potentially overrides the bootloader"
     },
     {
       'b', "boot", &config.boot,
@@ -418,9 +424,14 @@ main(int argc, char* argv[])
 
         if (config.erase)
         {
-            timer_start();
-            flasher.erase(config.offsetArg);
-            printf("\nDone in %5.3f seconds\n", timer_stop());
+            if(config.offsetArg == 0x0 && ! config.allowZeroOffset){
+               printf("\nNot erasing from offset 0x0 as not to overwrite the bootloader\n 
+                Use option \"allowZeroOffset\" to allow overwrite.");
+            }else{
+                timer_start();
+                flasher.erase(config.offsetArg);
+                printf("\nDone in %5.3f seconds\n", timer_stop());
+            }
         }
 
         if (config.write)
