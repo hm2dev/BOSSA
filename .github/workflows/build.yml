@@ -1,0 +1,72 @@
+name: Build BOSSA
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        target: [linux, windows]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # -----------------------------
+    # Install dependencies
+    # -----------------------------
+    - name: Install Linux build deps
+      if: matrix.target == 'linux'
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential
+
+    - name: Install MinGW for Windows cross-build
+      if: matrix.target == 'windows'
+      run: |
+        sudo apt update
+        sudo apt install -y mingw-w64
+
+    # -----------------------------
+    # Build
+    # -----------------------------
+    - name: Build (Linux)
+      if: matrix.target == 'linux'
+      run: |
+        make clean
+        make WX=0 bossac -j$(nproc)
+
+    - name: Build (Windows cross)
+      if: matrix.target == 'windows'
+      run: |
+        make clean
+        WX_CONFIG=/bin/false make OS=MINGW32 WX=0 \
+          CC=x86_64-w64-mingw32-gcc \
+          CXX=x86_64-w64-mingw32-g++ \
+          LDFLAGS="-static" \
+          bossac \
+          -j$(nproc)
+
+        # strip binary
+        x86_64-w64-mingw32-strip bin/bossac.exe
+
+    # -----------------------------
+    # Upload artifacts
+    # -----------------------------
+    - name: Upload Linux binary
+      if: matrix.target == 'linux'
+      uses: actions/upload-artifact@v4
+      with:
+        name: bossac-linux
+        path: bin/bossac
+
+    - name: Upload Windows binary
+      if: matrix.target == 'windows'
+      uses: actions/upload-artifact@v4
+      with:
+        name: bossac-windows
+        path: bin/bossac.exe
